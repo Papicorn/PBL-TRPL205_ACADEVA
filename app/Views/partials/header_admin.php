@@ -4,26 +4,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <?= csrf_meta() ?>
     <title><?= $title . " - " . config('App')->appName ?></title>
-    
-    
     
     <link rel="shortcut icon" href="<?= base_url('/images/favicon1.png') ?>" type="image/x-icon">
     
-
-
   <link rel="stylesheet" href="<?= base_url('/assets/compiled/css/app.css') ?>">
   <link rel="stylesheet" href="<?= base_url('/assets/compiled/css/app-dark.css') ?>">
   <link rel="stylesheet" href="<?= base_url('/assets/compiled/css/iconly.css') ?>">
+  <link rel="stylesheet" href="<?= base_url('/assets/compiled/css/table-datatable.css') ?>">
+  <link rel="stylesheet" href="<?= base_url('/assets/extensions/simple-datatables/style.css') ?>">
   <link rel="stylesheet" href="<?= base_url('/css/preloader.css') ?>">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 
 
-  <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js'></script>
-
-  
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.10.2/umd/popper.min.js"></script>
-  
-
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="<?= base_url('/fullcalendar/dist/index.global.min.js') ?>"></script>
+  <script src="<?= base_url('/assets/extensions/jquery/jquery.min.js') ?>"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.10.2/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     
 </head>
 
@@ -39,7 +40,7 @@
     </div>
     <!-- END PRELOADER PAGE -->
 
-    <script src="assets/static/js/initTheme.js"></script>
+    <script src="<?= base_url('assets/static/js/initTheme.js') ?>"></script>
     <div id="app">
 <div id="sidebar">
             <div class="sidebar-wrapper active">
@@ -86,40 +87,55 @@
             <li class="sidebar-title">Menu</li>
             
             <li
-                class="sidebar-item active ">
-                <a href="index.html" class='sidebar-link'>
+                class="sidebar-item <?php if($title == "Beranda"): echo 'active'; endif; ?>">
+                <a href="<?= route_to('beranda.admin') ?>" class='sidebar-link'>
                     <i class="bi bi-grid-fill"></i>
                     <span>Beranda</span>
                 </a>
-                
-
             </li>
-            
             <li
-                class="sidebar-item">
-                <a href="index.html" class='sidebar-link'>
-                <i class="bi bi-person-fill-add"></i>
-                    <span>Daftarkan Akun</span>
+                class="sidebar-item <?php if($title == "Prodi"): echo 'active'; endif; ?>">
+                <a href="<?= route_to('hal.prodi') ?>" class='sidebar-link'>
+                <i class="fa-solid fa-users-gear"></i>
+                    <span>Prodi</span>
                 </a>
-                
-
+            </li>
+            <li
+                class="sidebar-item <?php if($title == "Kelas"): echo 'active'; endif; ?>">
+                <a href="<?= route_to('hal.kelas') ?>" class='sidebar-link'>
+                    <i class="fa-solid fa-users-rectangle"></i>
+                    <span>Kelas</span>
+                </a>
             </li>
             
             <li
-                class="sidebar-item">
-                <a href="index.html" class='sidebar-link'>
-                    <i class="bi bi-book-fill"></i>
+                class="sidebar-item <?php if($title == "Data Akun"): echo 'active'; endif; ?>">
+                <a href="<?= route_to('hal.data_akun') ?>" class='sidebar-link'>
+                    <i class="fa-solid fa-user-plus"></i>
+                    <span>Data Akun</span>
+                </a>
+            </li>
+            <li
+                class="sidebar-item <?php if($title == "Matakuliah"): echo 'active'; endif; ?>">
+                <a href="<?= route_to('hal.matakuliah') ?>" class='sidebar-link'>
+                    <i class="fa-solid fa-book-open"></i>
                     <span>Matakuliah</span>
                 </a>
+            </li>
+            <li
+                class="sidebar-item <?php if($title == "Jadwal Ujian"): echo 'active'; endif; ?>">
+                <a href="<?= route_to('hal.jadwal_ujian') ?>" class='sidebar-link'>
+                    <i class="fa-solid fa-calendar"></i>
+                    <span>Jadwal Ujian</span>
+                </a>
                 
 
             </li>
-            
             <li
                 class="sidebar-item">
-                <a href="index.html" class='sidebar-link'>
-                <i class="bi bi-person-square"></i>
-                    <span>Kelas</span>
+                <a href="<?= route_to('fungsi.keluar') ?>" class='sidebar-link text-danger' style="background-color: rgba(252, 210, 210, 0.3);">
+                <i class="fa-solid text-danger fa-right-from-bracket"></i>
+                    <span>Keluar</span>
                 </a>
                 
 
@@ -130,4 +146,23 @@
     </div>
 </div>
         </div>
-        
+        <div id="main">
+            <header class="mb-3">
+                <a href="#" class="burger-btn d-block d-xl-none">
+                    <i class="bi bi-justify fs-3"></i>
+                </a>
+            </header>
+
+            <div class="d-flex justify-content-between">
+                <div class="page-heading">
+                    <h3 class="mb-0"><?= $title ?></h3>
+                    <h5>Selamat datang <?= session()->get('nama_pengguna') ?>!</h5>
+                </div> 
+                <div>
+                    <font class="fw-bold me-2"><i class="bi bi-wrench-adjustable-circle-fill me-1 text-primary"></i><?= session()->get('nama_pengguna') ?></font>
+                    
+                    <div class="avatar avatar-lg">
+                        <img src="<?= base_url('/assets/compiled/jpg/5.jpg') ?>">
+                    </div>
+                </div>
+            </div>

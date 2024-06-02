@@ -1,7 +1,7 @@
 <footer>
     <div class="footer clearfix mb-0 text-muted">
         <div class="float-start">
-            <p>2023 &copy; Mazer</p>
+            <p>2024 &copy; Acadeva</p>
         </div>
         <div class="float-end">
             <p>Crafted with <span class="text-danger"><i class="bi bi-heart-fill icon-mid"></i></span>
@@ -21,38 +21,32 @@
 <!-- Need: Apexcharts -->
 <script src="<?= base_url('/assets/extensions/apexcharts/apexcharts.min.js') ?>"></script>
 <script src="<?= base_url('/assets/static/js/pages/dashboard.js') ?>"></script>
+<script src="<?= base_url('/assets/extensions/simple-datatables/umd/simple-datatables.js') ?>"></script>
+<script src="<?= base_url('/assets/static/js/pages/simple-datatables.js') ?>"></script>
+
+    <!-- Popper.js from CDN -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js"></script>
 <script>
+    flatpickr("#timePicker", {
+        enableTime: true,
+        noCalendar: true,
+        dateFormat: "H:i:S",
+        time_24hr: true
+    });
 
-      document.addEventListener('DOMContentLoaded', function() {
-        var calendarEl = document.getElementById('calendar');
-        var calendar = new FullCalendar.Calendar(calendarEl, {
-            height: 450,
-          initialView: 'dayGridMonth',
-          headerToolbar: {
-            left: 'prev,next',
-            center: 'title',
-            right: 'dayGridMonth,dayGridWeek,dayGridDay' 
-        },
-        
-        events: [
-            {
-                allDay: false,
-                title: 'Rapat Pagi',
-                description: 'description for Repeating Event',
-                start: '2024-05-01T09:00:00',
-                end: '2024-05-03T10:00:00'
-            }
-        ]
-        });
-        calendar.render();
-      });
+    document.getElementById('timeForm').addEventListener('submit', function(event) {
+        event.preventDefault();
 
-    </script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        var time = document.getElementById('timePicker').value;
+        console.log(time); // Output: HH:MM:SS
+        this.submit();
+    });
 
+</script>
         <script>
-        // set delay 10s
-        var delay = 2000;
+        var delay = 500;
         
         $(window).on('load', function() {
             setTimeout(function(){
@@ -61,6 +55,17 @@
             },delay);
         });
     </script>
+    <?php 
+    if (session()->has('sweet')):
+    // $errors = implode('<br>', array_map('esc', session('gagal')));
+    ?>
+    <script>
+        Swal.fire({
+            title: "<?= session()->get('sweet_text') ?>",
+            icon: "<?= session()->get('sweet') ?>"
+        });
+    </script>
+    <?php endif; ?>
     
 
 </body>

@@ -9,6 +9,7 @@ class DosenModel extends Model
     protected $table            = 'dosen';
     protected $primaryKey       = 'nidn';
     protected $protectFields    = true;
+    protected $allowedFields = ['nidn','nama_pengguna','nama_lengkap','email','kata_sandi','kelamin','alamat','no_telpon'];
 
     public function ambilDataDosen($nama_pengguna)
     {

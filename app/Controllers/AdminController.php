@@ -7,9 +7,27 @@ use CodeIgniter\HTTP\ResponseInterface;
 use App\Models\AdminModel;
 use App\Models\MahasiswaModel;
 use App\Models\DosenModel;
+use App\Models\SoalUjianModel;
+use App\Models\JadwalUjianModel;
+use App\Models\KelasModel;
+use App\Models\MatakuliahModel;
+use App\Models\ProdiModel;
 
 class AdminController extends BaseController
 {
+    protected $mdosen;
+    protected $mmhs;
+    protected $mkelas;
+    protected $mmatkul;
+    protected $mprodi;
+    public function __construct()
+    {
+        $this->mdosen = new DosenModel();
+        $this->mmhs = new MahasiswaModel();
+        $this->mkelas = new KelasModel();
+        $this->mprodi = new ProdiModel();
+        $this->mmatkul = new MatakuliahModel();
+    }
     public function masuk()
     {
         $validationRules = [
@@ -75,17 +93,61 @@ class AdminController extends BaseController
     public function beranda()
     {
         if(session()->get('role') === 'admin'){
-            $mmhs = new MahasiswaModel();
-            $mdosen = new DosenModel();
+            $msoal = new SoalUjianModel();
+            $mjadwal = new JadwalUjianModel();
 
-            $mhscount = $mmhs->countAll();
-            $dosencount = $mdosen->countAll();
+            $currentDateTime = new \DateTime();
+
+            $mhscount = $this->mmhs->countAll();
+            $dosencount = $this->mdosen->countAll();
+            $soalcount = $msoal->countAll();
+            $jadwalcount = $mjadwal->countAll();
+
+            $semuajadwal = $mjadwal->joinJadwalMatkulKelasProdi();
 
             $data['jumlah_mhs'] = $mhscount;
             $data['jumlah_dosen'] = $dosencount;
+            $data['jumlah_soal'] = $soalcount;
+            $data['jumlah_jadwal'] = $jadwalcount;
+
+            foreach ($semuajadwal as &$jadwal) {
+                $ujianSelesai = new \DateTime($jadwal['tanggal'] . ' ' . $jadwal['waktu_selesai']);
+                $ujianMulai = new \DateTime($jadwal['tanggal'] . ' ' . $jadwal['waktu_mulai']);
+                if($currentDateTime <= $ujianMulai) {
+                    $jadwal['status'] = "Belum Dimulai";
+                    $jadwal['badge'] = "warning";
+                } else if ($currentDateTime <= $ujianSelesai && $currentDateTime >= $ujianMulai) {
+                    $jadwal['status'] = '<i class="fa-solid fa-file-pen fa-bounce"></i> Berlangsung';
+                    $jadwal['badge'] = "secondary";
+                } else {
+                    $jadwal['status'] = "Selesai";
+                    $jadwal['badge'] = "primary";                    
+                };
+            };
+            
+            $data['semua_jadwal'] = $semuajadwal;
+
             $data['title'] = 'Beranda';
         
             return view('beranda/admin/beranda', $data);
+        } else {
+            return redirect()->to(base_url('/home'));
+        }
+    }
+    public function halamanDataAkun()
+    {
+        if(session()->get('role') === 'admin') {
+            $dosen = $this->mdosen->findAll();
+            $mhs = $this->mmhs->ambilMhsJoinKelasJoinProdi();
+            $kelas = $this->mkelas->findAll();
+            $prodi = $this->mprodi->findAll();
+
+            $data['dosen'] = $dosen;
+            $data['prodi'] = $prodi;
+            $data['mhs'] = $mhs;
+            $data['kelas'] = $kelas;
+            $data['title'] = "Data Akun";
+            return view('beranda/admin/data_akun', $data);
         } else {
             return redirect()->to(base_url('/home'));
         }

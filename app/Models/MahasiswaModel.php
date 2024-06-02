@@ -9,6 +9,7 @@ class MahasiswaModel extends Model
     protected $table            = 'mahasiswa';
     protected $primaryKey       = 'nim';
     protected $protectFields    = true;
+    protected $allowedFields    = ['nim','nama_pengguna','email','nama_lengkap','kata_sandi','alamat','no_telpon','tanggal_lahir','id_kelas','kelamin','semester'];
 
     public function ambilDataMahasiswa($nama_pengguna)
     {
@@ -16,6 +17,17 @@ class MahasiswaModel extends Model
                 ->where('nama_pengguna', $nama_pengguna)
                 ->get()
                 ->getRowArray();
+
+        return $data;
+    }
+    public function ambilMhsJoinKelasJoinProdi()
+    {
+        $data = $this->db->table($this->table)
+                    ->select('mahasiswa.*, kelas.nama_kelas, prodi.kode_prodi')
+                    ->join('kelas', 'kelas.id_kelas = mahasiswa.id_kelas')
+                    ->join('prodi', 'prodi.kode_prodi = kelas.kode_prodi')
+                    ->get()
+                    ->getResultArray();
 
         return $data;
     }
