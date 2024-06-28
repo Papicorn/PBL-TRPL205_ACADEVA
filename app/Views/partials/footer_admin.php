@@ -3,10 +3,6 @@
         <div class="float-start">
             <p>2024 &copy; Acadeva</p>
         </div>
-        <div class="float-end">
-            <p>Crafted with <span class="text-danger"><i class="bi bi-heart-fill icon-mid"></i></span>
-                by <a href="https://saugi.me">Saugi</a></p>
-        </div>
     </div>
 </footer>
         </div>
@@ -29,6 +25,31 @@
 
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js"></script>
 <script>
+    document.addEventListener('keydown', function(e) {
+        // Disable F12
+        if (e.keyCode == 123) {
+            e.preventDefault();
+        }
+        // Disable Ctrl+Shift+I
+        if (e.ctrlKey && e.shiftKey && e.keyCode == 73) {
+            e.preventDefault();
+        }
+        // Disable Ctrl+Shift+C
+        if (e.ctrlKey && e.shiftKey && e.keyCode == 67) {
+            e.preventDefault();
+        }
+        // Disable Ctrl+Shift+J
+        if (e.ctrlKey && e.shiftKey && e.keyCode == 74) {
+            e.preventDefault();
+        }
+        // Disable Ctrl+U
+        if (e.ctrlKey && e.keyCode == 85) {
+            e.preventDefault();
+        }
+    });
+</script>
+
+<script>
     flatpickr("#timePicker", {
         enableTime: true,
         noCalendar: true,
@@ -40,7 +61,6 @@
         event.preventDefault();
 
         var time = document.getElementById('timePicker').value;
-        console.log(time); // Output: HH:MM:SS
         this.submit();
     });
 

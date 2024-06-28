@@ -12,6 +12,7 @@ use CodeIgniter\Filters\InvalidChars;
 use CodeIgniter\Filters\PageCache;
 use CodeIgniter\Filters\PerformanceMetrics;
 use CodeIgniter\Filters\SecureHeaders;
+use App\Filters\Maintenance;
 
 class Filters extends BaseFilters
 {
@@ -34,6 +35,7 @@ class Filters extends BaseFilters
         'forcehttps'    => ForceHTTPS::class,
         'pagecache'     => PageCache::class,
         'performance'   => PerformanceMetrics::class,
+        'maintenance'   => Maintenance::class,
     ];
 
     /**
@@ -53,6 +55,7 @@ class Filters extends BaseFilters
         'before' => [
             'forcehttps', // Force Global Secure Requests
             'pagecache',  // Web Page Caching
+            'maintenance',
         ],
         'after' => [
             'pagecache',   // Web Page Caching
@@ -71,8 +74,10 @@ class Filters extends BaseFilters
         'before' => [
             // 'honeypot',
             'csrf' => ['except' => [
-            'ajax/ambil-matkul-prodi', // Tambahkan rute ini
-            'ajax/ambil-kelas-prodi', // Tambahkan rute ini
+            'ajax/ambil-matkul-prodi', 
+            'ajax/ambil-kelas-prodi', 
+            'ajax/simpan-jawaban-mahasiswa', 
+            'ajax/simpan-ragu-mahasiswa', 
         ]],
             'cors',
             // 'invalidchars',

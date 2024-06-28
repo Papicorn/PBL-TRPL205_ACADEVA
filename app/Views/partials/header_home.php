@@ -19,7 +19,7 @@
     <nav class="navbar navbar-expand-lg pl-3 pl-sm-0" id="navbar">
     <div class="container">
       <div class="navbar-brand-wrapper d-flex w-100">
-        <a href="#"><img src="images/logo_icon.png" style="width: 170px;" alt=""></a>
+        <a href="<?= route_to('home') ?>"><img src="images/logo_icon.png" style="width: 170px;" alt=""></a>
         <button class="navbar-toggler ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="mdi mdi-menu navbar-toggler-icon"></span>
         </button> 
@@ -28,10 +28,10 @@
         <ul class="navbar-nav align-items-lg-center align-items-start ml-auto">
           <li class="d-flex align-items-center justify-content-between pl-4 pl-lg-0">
             <div class="navbar-collapse-logo">
-              <a href="#"><img src="/images/logo_icon.png" alt="" style="width: 170px;"></a>
+              <a href="<?= route_to('home') ?>"><img src="/images/logo_icon.png" alt="" style="width: 170px;"></a>
             </div>
             <button class="navbar-toggler close-button" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-              <span class="mdi mdi-close navbar-toggler-icon pl-5"></span>
+              <span class="mdi mdi-close navbar-toggler-icon"></span>
             </button>
           </li>
           <li class="nav-item">
@@ -53,16 +53,9 @@
           </li>
           <li class="nav-item">
             <?php if ($title == "Home"): ?>
-              <a class="nav-link" href="#digital-marketing-section">Blog</a> 
+              <a class="nav-link" style="width:150px!important;" href="#contact-section">Hubungi Kami</a> 
             <?php else: ?> 
-              <a class="nav-link" href="<?= base_url('/home') ?>#digital-marketing-section">Blog</a>
-            <?php endif; ?>
-          </li>
-          <li class="nav-item">
-            <?php if ($title == "Home"): ?>
-              <a class="nav-link" href="#feedback-section">Testimonials</a>
-            <?php else: ?> 
-              <a class="nav-link" href="<?= base_url('/home') ?>#feedback-section">Testimonials</a>
+              <a class="nav-link" style="width:150px!important;" href="<?= base_url('/home') ?>#contact-section">Hubungi Kami</a>
             <?php endif; ?>
           </li>
           <?php if(session()->has('nama_pengguna')): ?>
@@ -73,10 +66,14 @@
               </a>
 
               <div class="dropdown-menu dropdown-menu-right">
-              <?php if(session()->get('role') == 'mahasiswa' || session()->get('role') == 'dosen'): ?>
-                  <p class="dropdown-item m-0 font-weight-bold">Hai <?= $data['nama_lengkap'] ?>!</p>
+              <?php if(session()->get('role') == 'dosen'): ?>
+                  <p class="dropdown-item m-0 font-weight-bold">Haim <?= $data['nama_lengkap'] ?>!</p>
                   <div class="dropdown-divider"></div>
-                  <a href="<?= base_url('/beranda') ?>"><p class="dropdown-item m-0">Beranda</p></a>
+                  <a href="<?= base_url(route_to('beranda.dosen')) ?>"><p class="dropdown-item m-0">Beranda</p></a>
+                <?php elseif(session()->get('role') == 'mahasiswa'): ?>
+                  <p class="dropdown-item m-0 font-weight-bold">Hai, <?= $data['nama_lengkap'] ?>!</p>
+                  <div class="dropdown-divider"></div>
+                  <a href="<?= base_url(route_to('beranda.mahasiswa')) ?>"><p class="dropdown-item m-0">Beranda</p></a>
                 <?php elseif(session()->get('role') == 'admin'): ?>
                   <p class="dropdown-item m-0 font-weight-bold">Hai <?= $data['email'] ?>!</p>
                   <div class="dropdown-divider"></div>

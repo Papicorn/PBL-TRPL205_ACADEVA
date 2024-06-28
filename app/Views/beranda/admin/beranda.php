@@ -50,7 +50,7 @@
                                     </div>
                                 </div>
                                 <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
-                                    <h6 class="text-muted font-semibold">Soal Ujian Tersimpan</h6>
+                                    <h6 class="text-muted font-semibold">Soal Asesmen Tersimpan</h6>
                                     <h6 class="font-extrabold mb-0"><?= $jumlah_soal ?></h6>
                                 </div>
                             </div>
@@ -79,8 +79,11 @@
             <div class="row">
                 <div class="col-12">
                     <div class="card">
-                        <div class="card-header">
+                        <div class="card-header d-flex justify-content-between">
                             <h4>List Jadwal</h4>
+                            <div>
+                                <a href="<?= route_to('hal.jadwal_asesmen') ?>" class="btn btn-primary"><i class="fa-solid fa-gear fa-spin me-1"></i> Kelola Jadwal</a>
+                            </div>
                         </div>
                         <div class="card-body">
                         <table class="table table-striped" id="table1" data-table>
@@ -120,7 +123,7 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <h4>Kalender Ujian</h4>
+                            <h4>Kalender Asesmen</h4>
                         </div>
                         <div class="card-body">
                             <div id='calendar'></div>

@@ -8,10 +8,12 @@ use App\Models\JadwalUjianModel;
 use App\Models\KelasModel;
 use App\Models\MatakuliahModel;
 use App\Models\ProdiModel;
+use App\Models\MahasiswaModel;
 
 class JadwalUjianController extends BaseController
 {
     protected $mjadwal;
+    protected $mmhs;
     protected $mkelas;
     protected $mprodi;
     protected $mmatkul;
@@ -19,42 +21,69 @@ class JadwalUjianController extends BaseController
     public function __construct()
     {
         $this->mjadwal = new JadwalUjianModel();
+        $this->mmhs = new MahasiswaModel();
         $this->mprodi = new ProdiModel();
         $this->mkelas = new KelasModel();
         $this->mmatkul = new MatakuliahModel();
         $this->db = \Config\Database::connect();
     }
-    public function halamanJadwalUjian()
+    public function halamanJadwalAsesmen()
     {
         if(session()->get('role') === "admin") {
-        $jadwal = $this->mjadwal->joinJadwalMatkulKelasProdi();
-        $kelas = $this->mkelas->findAll();
-        $matkul = $this->mmatkul->findAll();
-        $prodi = $this->mprodi->findAll();
+            $jadwal = $this->mjadwal->joinJadwalMatkulKelasProdi();
+            $kelas = $this->mkelas->findAll();
+            $matkul = $this->mmatkul->findAll();
+            $prodi = $this->mprodi->findAll();
 
-        $currentDateTime = new \DateTime();
+            $currentDateTime = new \DateTime();
 
-        foreach ($jadwal as &$jadwal1) {
-            $ujianSelesai = new \DateTime($jadwal1['tanggal'] . ' ' . $jadwal1['waktu_selesai']);
-            $ujianMulai = new \DateTime($jadwal1['tanggal'] . ' ' . $jadwal1['waktu_mulai']);
-            if($currentDateTime <= $ujianMulai) {
-                $jadwal1['status'] = "Belum Dimulai";
-                $jadwal1['badge'] = "warning";
-            } else if ($currentDateTime <= $ujianSelesai && $currentDateTime >= $ujianMulai) {
-                $jadwal1['status'] = '<i class="fa-solid fa-file-pen fa-bounce"></i> Berlangsung';
-                $jadwal1['badge'] = "secondary";
-            } else {
-                $jadwal1['status'] = 'Selesai';
-                $jadwal1['badge'] = "success";                    
+            foreach ($jadwal as &$jadwal1) {
+                $ujianSelesai = new \DateTime($jadwal1['tanggal'] . ' ' . $jadwal1['waktu_selesai']);
+                $ujianMulai = new \DateTime($jadwal1['tanggal'] . ' ' . $jadwal1['waktu_mulai']);
+                if($currentDateTime <= $ujianMulai) {
+                    $jadwal1['status'] = "Belum Dimulai";
+                    $jadwal1['badge'] = "warning";
+                } else if ($currentDateTime <= $ujianSelesai && $currentDateTime >= $ujianMulai) {
+                    $jadwal1['status'] = '<i class="fa-solid fa-file-pen fa-bounce"></i> Berlangsung';
+                    $jadwal1['badge'] = "secondary";
+                } else {
+                    $jadwal1['status'] = 'Selesai';
+                    $jadwal1['badge'] = "primary";                    
+                };
             };
-        };
 
-        $data['jadwal'] = $jadwal;
-        $data['prodi'] = $prodi;
-        $data['matkul'] = $matkul;
-        $data['kelas'] = $kelas;
-        $data['title'] = "Jadwal Ujian";
-        return view('beranda/admin/jadwal_ujian', $data);
+            $data['jadwal'] = $jadwal;
+            $data['prodi'] = $prodi;
+            $data['matkul'] = $matkul;
+            $data['kelas'] = $kelas;
+            $data['title'] = "Jadwal Asesmen";
+            return view('beranda/admin/jadwal_ujian', $data);
+        } elseif(session()->get('role') === "mahasiswa") {
+            $nama_pengguna = session()->get('nama_pengguna');
+            $mhs = $this->mmhs->ambilDataMahasiswa($nama_pengguna);
+            $jadwal = $this->mjadwal->ambilJadwalDariKelas($mhs['id_kelas']);
+
+            $currentDateTime = new \DateTime();
+
+            foreach ($jadwal as &$jadwal1) {
+                $ujianSelesai = new \DateTime($jadwal1['tanggal'] . ' ' . $jadwal1['waktu_selesai']);
+                $ujianMulai = new \DateTime($jadwal1['tanggal'] . ' ' . $jadwal1['waktu_mulai']);
+                if($currentDateTime <= $ujianMulai) {
+                    $jadwal1['status'] = "Belum Dimulai";
+                    $jadwal1['badge'] = "warning";
+                } else if ($currentDateTime <= $ujianSelesai && $currentDateTime >= $ujianMulai) {
+                    $jadwal1['status'] = '<i class="fa-solid fa-file-pen fa-bounce"></i> Berlangsung';
+                    $jadwal1['badge'] = "secondary";
+                } else {
+                    $jadwal1['status'] = "Selesai";
+                    $jadwal1['badge'] = "primary";                    
+                };
+            };
+
+            $data['title'] = 'Jadwal Asesmen';
+            $data['mhs'] = $mhs;
+            $data['jadwal'] = $jadwal;
+            return view('beranda/mahasiswa/jadwal_asesmen', $data);
         } else {
             return redirect()->to(base_url('/home'));
         }
@@ -100,6 +129,18 @@ class JadwalUjianController extends BaseController
         $tanggal = esc($this->request->getPost('tanggal'));
         $waktu_mulai = esc($this->request->getPost('waktu_mulai'));
         $waktu_selesai = esc($this->request->getPost('waktu_selesai'));
+        
+        $currentDateTime = new \DateTime();
+        $dibuatTgl = new \DateTime($tanggal . ' ' . $waktu_mulai);
+        if($dibuatTgl->format('Y-m-d') < $currentDateTime->format('Y-m-d')) {
+            $pesan = [
+                'pesan' => 'Tanggal yang di pilih telah berlalu!',
+                'alert' => 'danger'
+            ];
+            session()->setFlashData('sweet', 'error');
+            session()->setFlashData('sweet_text', 'Permintaan Gagal!');
+            return redirect()->back()->with('pesan', $pesan);
+        }
 
         $data = [
             'kode_matkul' => $kode_matkul,
@@ -170,6 +211,18 @@ class JadwalUjianController extends BaseController
         $waktu_mulai = esc($this->request->getPost('waktu_mulai'));
         $waktu_selesai = esc($this->request->getPost('waktu_selesai'));
 
+        $currentDateTime = new \DateTime();
+        $dibuatTgl = new \DateTime($tanggal . ' ' . $waktu_mulai);
+        if($dibuatTgl->format('Y-m-d') < $currentDateTime->format('Y-m-d')) {
+            $pesan = [
+                'pesan' => 'Tanggal yang di pilih telah berlalu!',
+                'alert' => 'danger'
+            ];
+            session()->setFlashData('sweet', 'error');
+            session()->setFlashData('sweet_text', 'Permintaan Gagal!');
+            return redirect()->back()->with('pesan', $pesan);
+        }
+        
         $data = [
             'id_jadwal' => $id_jadwal,
             'kode_matkul' => $kode_matkul,

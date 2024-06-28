@@ -5,12 +5,23 @@ namespace App\Controllers;
 use App\Controllers\BaseController;
 use CodeIgniter\HTTP\ResponseInterface;
 use App\Models\DosenModel;
+use App\Models\JadwalUjianModel;
+use App\Models\MatakuliahModel;
+use App\Models\RekapitulasiModel;
 
 class DosenController extends BaseController
 {
     protected $db;
+    protected $mmatkul;
+    protected $mrekap;
+    protected $mdosen;
+    protected $mjadwal;
     public function __construct()
     {
+        $this->mdosen = new DosenModel();
+        $this->mrekap = new RekapitulasiModel();
+        $this->mmatkul = new MatakuliahModel();
+        $this->mjadwal = new JadwalUjianModel();
         $this->db = \Config\Database::connect();
     }
     public function masuk()
@@ -34,12 +45,10 @@ class DosenController extends BaseController
             return redirect()->to(base_url('/masuk'))->with('gagal', $gagal);
         }
 
-        $mdosen = new DosenModel();
-
         $nama_pengguna = $this->request->getPost('nama_pengguna');
         $kata_sandi = $this->request->getPost('kata_sandi');
 
-        $cek = $mdosen->ambilDataDosen($nama_pengguna);
+        $cek = $this->mdosen->ambilDataDosen($nama_pengguna);
 
         if($cek && password_verify($kata_sandi, $cek['kata_sandi'])) {
             $sessionData = [
@@ -53,6 +62,7 @@ class DosenController extends BaseController
 
             session()->setFlashdata('title', 'Berhasil masuk!');
             session()->setFlashdata('success', 'Anda berhasil masuk ke aplikasi!');
+            session()->setFlashdata('link', route_to('beranda.dosen'));
 
             return redirect()->to(base_url('/home'));
         } else {
@@ -82,8 +92,6 @@ class DosenController extends BaseController
             return redirect()->back()->withInput()->with('gagal', $gagal);
         }
 
-        $mdosen = new DosenModel();
-
         $nidn = $this->request->getPost('nidn');
         $nama_lengkap = $this->request->getPost('nama_depan') . " " . $this->request->getPost('nama_belakang');
         $nama_pengguna = strtolower($this->request->getPost('nama_depan')) . "." . $this->request->getPost('nidn');
@@ -104,7 +112,7 @@ class DosenController extends BaseController
             'no_telpon' => $no_telpon
         ];
 
-        $mdosen->insert($datadosen);
+        $this->mdosen->insert($datadosen);
 
         if ($this->db->affectedRows() == 0) {
             $pesan = [
@@ -126,10 +134,8 @@ class DosenController extends BaseController
     }
     public function hapusDataDosen($nidn)
     {
-        $mdosen = new DosenModel();
-
-        if($nidn !== NULL && $mdosen->find($nidn)) {
-            if($mdosen->delete($nidn)) {
+        if($nidn && $this->mdosen->find($nidn)) {
+            if($this->mdosen->delete($nidn)) {
                 $pesan = [
                     'pesan' => 'Data berhasil dihapus!',
                     'alert' => 'success'
@@ -168,10 +174,8 @@ class DosenController extends BaseController
             return redirect()->back()->withInput()->with('gagal', $gagal);
         }
 
-        $mdosen = new DosenModel();
-
         if($this->request->getPost('kata_sandi') == NULL) {
-            $cariDosen = $mdosen->find($nidnRequest);
+            $cariDosen = $this->mdosen->find($nidnRequest);
             $kata_sandi = $cariDosen['kata_sandi'];
         } else {
             $kata_sandi = password_hash($this->request->getPost('kata_sandi'), PASSWORD_DEFAULT);
@@ -195,8 +199,8 @@ class DosenController extends BaseController
             'no_telpon' => $no_telpon
         ];
 
-        $cekData = $mdosen->find($nidnRequest);
-        $mdosen->save($datadosen);
+        $cekData = $this->mdosen->find($nidnRequest);
+        $this->mdosen->save($datadosen);
 
         if (!$cekData && $this->db->affectedRows() == 0) {
             $pesan = [
@@ -214,6 +218,43 @@ class DosenController extends BaseController
             session()->setFlashdata('sweet', 'success');
             session()->setFlashdata('sweet_text', 'Permintaan Berhasil!');
             return redirect()->to(base_url(route_to('hal.data_akun')))->with('pesan', $pesan);
+        }
+    }
+    public function beranda()
+    {
+        if(session()->get('role') === 'dosen') {
+            $semua_jadwal = $this->mjadwal->joinJadwalMatkulKelasProdi();
+            $nama_pengguna = session()->get('nama_pengguna');
+            $dosen = $this->mdosen->ambilDataDosen($nama_pengguna);
+            $nidn = $dosen['nidn'];
+
+            $matkul_diampu = $this->mmatkul->ambilMatkulDariDiampu($nidn);
+            $rekap_diampu = $this->mrekap->ambilRekapDariMatkul($nidn);
+            $currentDateTime = new \DateTime();
+
+            foreach ($semua_jadwal as &$jadwal) {
+                $ujianSelesai = new \DateTime($jadwal['tanggal'] . ' ' . $jadwal['waktu_selesai']);
+                $ujianMulai = new \DateTime($jadwal['tanggal'] . ' ' . $jadwal['waktu_mulai']);
+                if($currentDateTime <= $ujianMulai) {
+                    $jadwal['status'] = "Belum Dimulai";
+                    $jadwal['badge'] = "warning";
+                } else if ($currentDateTime <= $ujianSelesai && $currentDateTime >= $ujianMulai) {
+                    $jadwal['status'] = '<i class="fa-solid fa-file-pen fa-bounce"></i> Berlangsung';
+                    $jadwal['badge'] = "secondary";
+                } else {
+                    $jadwal['status'] = "Selesai";
+                    $jadwal['badge'] = "primary";                    
+                };
+            };
+
+            $data['dosen'] = $dosen;
+            $data['matkul_diampu'] = $matkul_diampu;
+            $data['rekap_diampu'] = $rekap_diampu;
+            $data['semua_jadwal'] = $semua_jadwal;
+            $data['title'] = 'Beranda';
+            return view('beranda/dosen/beranda', $data);
+        } else {
+            return redirect()->to(base_url('/home'));
         }
     }
 

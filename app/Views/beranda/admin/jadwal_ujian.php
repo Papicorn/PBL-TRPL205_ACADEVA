@@ -1,7 +1,7 @@
 <?= $this->include('partials/header_admin') ?>
 
 <div class="page-content">
-    <div class="row">
+    <section class="row">
         <div class="col-12">
 
         <?php if(session()->has('pesan')): 
@@ -26,7 +26,7 @@
 
             <div class="card">
                 <div class="card-header d-flex justify-content-between">
-                    <h5>Jadwal ujian</h5>
+                    <h5>Jadwal Asesmen</h5>
                     <div>
                         <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#modalTambahJadwal"><i class="fa-solid fa-user-plus me-2"></i> Tambah Data</button>
                     </div>
@@ -61,7 +61,7 @@
                                     <div class="d-flex">
                                         <button class="me-1 btn btn-secondary btn-sm rounded col-12" type="button" data-bs-toggle="modal" data-bs-target="#p<?= $row['id_jadwal'] ?>UbahJadwal" style="width:80px;"><i class="fa-solid fa-pen-to-square"></i> Ubah</button>
                                         <button class="btn btn-danger btn-sm rounded col-12" type="button" data-bs-toggle="modal" data-bs-target="#p<?= $row['id_jadwal'] ?>Hapus" style="width:80px;"><i class="fa-solid fa-trash"></i> Hapus</button>
-                                    </div>                                    
+                                    </div>
                                 </td>
                             </tr>
                             <?php endforeach; ?>
@@ -72,7 +72,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </section>
 </div>
 
 <script src="<?= base_url('/js/ajax/jadwal_ujian/prodi_matakuliah.js') ?>"></script>

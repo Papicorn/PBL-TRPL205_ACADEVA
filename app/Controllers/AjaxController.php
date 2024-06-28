@@ -37,4 +37,22 @@ class AjaxController extends BaseController
 
         return $this->response->setStatusCode(403)->setBody('Forbidden');
     }
+    public function simpanJawabanMahasiswa()
+    {
+            $soal_id = $this->request->getPost('soal_id');
+            $pilihan_id = $this->request->getPost('pilihan_id');
+
+            // Pastikan data yang diterima valid
+            if($soal_id && $pilihan_id) {
+                // Simpan jawaban ke dalam sesi
+                $jawaban = session()->get('jawaban') ?? [];
+                $jawaban[$soal_id] = $pilihan_id;
+                session()->set('jawaban', $jawaban);
+
+                return $this->response->setStatusCode(200);
+            } else {
+                // Jika data tidak valid, kirim respon error
+                return $this->response->setStatusCode(400);
+            }
+    }
 }

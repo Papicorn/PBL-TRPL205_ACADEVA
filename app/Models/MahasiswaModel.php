@@ -31,5 +31,27 @@ class MahasiswaModel extends Model
 
         return $data;
     }
-
+    public function dataMhsKelasProdi($nim)
+    {
+        $data = $this->db->table($this->table)
+                    ->select('mahasiswa.*, kelas.nama_kelas, prodi.nama_prodi')
+                    ->join('kelas', 'kelas.id_kelas = mahasiswa.id_kelas')
+                    ->join('prodi', 'prodi.kode_prodi = kelas.kode_prodi')
+                    ->where('mahasiswa.nim', $nim)
+                    ->get()
+                    ->getRowArray();
+        return $data;
+    }
+    public function ambilMhsDiampuDosen($nidn)
+    {
+        $data = $this->db->table($this->table)
+                    ->select('mahasiswa.*')
+                    ->join('rekapitulasi', 'rekapitulasi.nim = mahasiswa.nim')
+                    ->join('matakuliah', 'matakuliah.kode_matkul = rekapitulasi.kode_matkul')
+                    ->where('matakuliah.nidn', $nidn)
+                    ->groupBy('mahasiswa.nim')
+                    ->get()
+                    ->getResultArray();
+        return $data;
+    }
 }

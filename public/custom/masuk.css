@@ -14,8 +14,14 @@ body {
 }
 
 .masukHover:hover {
+
 	background-color: #142E53;
 	color: #f8f9fa;
+}
+
+.masukHover:hover img {
+  -webkit-filter: brightness(9999);
+  filter: brightness(9999); /* For cross-browser compatibility */
 }
 
 .active {

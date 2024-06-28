@@ -41,11 +41,11 @@
                         </div>
                         <div class="col-4">
                             <label for="waktu_mulai" class="form-label">Waktu Mulai</label>
-                            <input type="time" name="waktu_mulai" id="waktu_mulai" class="form-control">
+                            <input type="time" name="waktu_mulai" id="timePicker" class="form-control">
                         </div>
                         <div class="col-4">
                             <label for="waktu_selesai" class="form-label">Waktu Selesai</label>
-                            <input type="time" name="waktu_selesai" id="waktu_selesai" class="form-control">
+                            <input type="time" name="waktu_selesai" id="timePicker" class="form-control">
                         </div>
                     </div>
                 </div>

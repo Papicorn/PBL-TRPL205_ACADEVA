@@ -42,7 +42,7 @@
                     <div class="row">
                         <div class="col-4">
                             <label for="tanggal" class="form-label">Tanggal</label>
-                            <input type="date" name="tanggal" id="tanggal" class="form-control" value="<?= $row['tanggal'] ?>">
+                            <input type="date" name="tanggal" id="tanggal" class="form-control">
                         </div>
                         <div class="col-4">
                             <label for="waktu_mulai" class="form-label">Waktu Mulai</label>

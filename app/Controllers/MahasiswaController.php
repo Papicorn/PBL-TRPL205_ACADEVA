@@ -5,18 +5,24 @@ namespace App\Controllers;
 use App\Controllers\BaseController;
 use CodeIgniter\HTTP\ResponseInterface;
 use App\Models\MahasiswaModel;
+use App\Models\JadwalUjianModel;
 use App\Models\KelasModel;
 use App\Models\ProdiModel;
+use App\Models\RekapitulasiModel;
 
 class MahasiswaController extends BaseController
 {
     protected $db;
     protected $mprodi;
+    protected $mrekap;
     protected $mmhs;
+    protected $mjadwal;
     protected $mkelas;
     public function __construct()
     {
         $this->mmhs = new MahasiswaModel();
+        $this->mrekap = new RekapitulasiModel();
+        $this->mjadwal = new JadwalUjianModel();
         $this->mkelas = new KelasModel();
         $this->mprodi = new ProdiModel();
         $this->db = \Config\Database::connect();
@@ -59,6 +65,7 @@ class MahasiswaController extends BaseController
 
             session()->setFlashdata('title', 'Berhasil masuk!');
             session()->setFlashdata('success', 'Anda berhasil masuk ke aplikasi!');
+            session()->setFlashdata('link', route_to('beranda.mahasiswa'));
 
             return redirect()->to(base_url('/home'));
         } else {
@@ -66,6 +73,48 @@ class MahasiswaController extends BaseController
                 'Email atau kata sandi tidak cocok!'
             ];
             return redirect()->to(base_url('masuk'))->with('gagal', $gagal);
+        }
+    }
+
+    public function beranda()
+    {
+        if(session()->get('role') === "mahasiswa") {
+            $nama_pengguna = session()->get('nama_pengguna');
+            $mhs = $this->mmhs->ambilDataMahasiswa($nama_pengguna);
+            $jadwal = $this->mjadwal->ambilJadwalDariKelas($mhs['id_kelas']);
+            $kelas = $this->mkelas->find($mhs['id_kelas']);
+            $rekap = $this->mrekap->nilaiRataRata($mhs['nim']);
+            $ujian_diikuti = $this->mrekap->hitungUjianDiikuti($mhs['nim']);
+
+            $currentDateTime = new \DateTime();
+
+            foreach ($jadwal as &$jadwal1) {
+                $ujianSelesai = new \DateTime($jadwal1['tanggal'] . ' ' . $jadwal1['waktu_selesai']);
+                $ujianMulai = new \DateTime($jadwal1['tanggal'] . ' ' . $jadwal1['waktu_mulai']);
+                if($currentDateTime <= $ujianMulai) {
+                    $jadwal1['status'] = "Belum Dimulai";
+                    $jadwal1['badge'] = "warning";
+                } else if ($currentDateTime <= $ujianSelesai && $currentDateTime >= $ujianMulai) {
+                    $jadwal1['status'] = '<i class="fa-solid fa-file-pen fa-bounce"></i> Berlangsung';
+                    $jadwal1['badge'] = "secondary";
+                } else {
+                    $jadwal1['status'] = "Selesai";
+                    $jadwal1['badge'] = "primary";                    
+                };
+            };
+
+            $data['data_beranda'] = [
+                'nama_kelas' => $kelas['nama_kelas'],
+                'kode_prodi' => $kelas['kode_prodi'],
+                'ratanilai' => number_format($rekap, 2),
+                'ujian_diikuti' => $ujian_diikuti
+            ];
+            $data['mhs'] = $mhs;
+            $data['jadwal'] = $jadwal;
+            $data['title'] = 'Beranda';
+            return view('beranda/mahasiswa/beranda', $data);
+        } else {
+            return redirect()->to(base_url('/masuk'));
         }
     }
     public function daftar()
@@ -141,7 +190,7 @@ class MahasiswaController extends BaseController
     }
     public function hapusDataMahasiswa($nim)
     {
-        if(!$nim && $this->mmhs->find($nim)) {
+        if($nim && $this->mmhs->find($nim)) {
             if($this->mmhs->delete($nim)) {
                 $pesan = [
                     'pesan' => 'Data berhasil dihapus!',
@@ -161,11 +210,11 @@ class MahasiswaController extends BaseController
             };
         } else {
             $pesan = [
-                'pesan' => 'Data gagal dihapus!',
+                'pesan' => 'Data mahasiswa tidak dipilih atau tidak ada!',
                 'alert' => 'danger'
             ];
             session()->setFlashdata('sweet', 'error');
-            session()->setFlashdata('sweet_text', 'Permintaan Gagal!');
+            session()->setFlashdata('sweet_text', 'Terjadi Kesalahan!');
             return redirect()->back()->with('pesan', $pesan);
         }
     }

@@ -20,6 +20,14 @@ class MatakuliahModel extends Model
                     ->getResultArray();
         return $data;
     }
+    public function ambilMatkulDariDiampu($nidn)
+    {
+        $data = $this->db->table($this->table)
+                    ->where('nidn', $nidn)
+                    ->get()
+                    ->getResultArray();
+        return $data;
+    }
     // public function insertAndCheck($data)
     // {
     //     $this->insert($data);

@@ -13,7 +13,7 @@
 
 </head>
 <body class="bg-light">
-<div class="position-absolute">
+<div class="position-absolute" style="z-index:00000">
 	<div class="purple"></div>
 	<div class="medium-blue"></div>
 	<div class="light-blue"></div>
@@ -31,110 +31,111 @@
 <div class="container py-5"> 
 
 	<a class="btn btn-primary" href="<?= base_url('/home') ?>"><span class="mdi mdi-arrow-left"></span> Kembali</a>
-  <div class="row d-flex justify-content-center align-items-center" style="height: 500px;">
-  	<div class="col-7">
+  <div class="row d-flex justify-content-center align-items-center">
+		<div class="col-lg-7 col-12 mt-4">
 
-  	<div class="card card-body rounded-3 shadow" style="border-radius: 20px !important;">
-	    <div class="col-12">
+		<div class="card card-body rounded-3 shadow  mt-4" style="border-radius: 20px !important;">
+			<div class="col-12">
 
-	      <div class="row gx-3 mb-4">
+			<div class="row gx-3 mb-4">
 
-	        <div class="col-4">
-	          <a data-bs-toggle="collapse" href="#formadmin" role="button" aria-expanded="false" aria-controls="formadmin" class="text-decoration-none text-primary btn-toggle">
-	            <div class="card shadow rounded-3 masukHover" style="border-radius: 20px !important;">
-	              <div class="card-body">
-	                <div class="text-center">
-	                  <img height="70" width="70" src="/images/admin_icons.png" alt="administrator" class="gambarHover">
-	                  <h6>Administrator</h6>
-	                </div>
-	              </div>
-	            </div>
-	          </a>
-	        </div>
+				<div class="col-4 mb-3">
+				<a data-bs-toggle="collapse" href="#formadmin" role="button" aria-expanded="false" aria-controls="formadmin" class="text-decoration-none text-primary btn-toggle">
+					<div class="card shadow rounded-3 masukHover" style="border-radius: 20px !important;">
+						<div class="card-body">
+							<div class="text-center">
+							<img src="/images/admin_icons.png" alt="administrator" class="img-fluid img-2">
+							<h6>Administrator</h6>
+							</div>
+						</div>
+					</div>
+				</a>
+				</div>
 
-	        <div class="col-4">
-	          <a data-bs-toggle="collapse" href="#formdosen" role="button" aria-expanded="false" aria-controls="formdosen" class="text-decoration-none text-primary btn-toggle">
-	            <div class="card shadow rounded-3 masukHover" style="border-radius: 20px !important;">
-	              <div class="card-body">
-	                <div class="text-center">
-	                  <img height="70" width="70" src="/images/dosen_icons.png" alt="dosen" class="gambarHover">
-	                  <h6>Dosen</h6>
-	                </div>
-	              </div>
-	            </div>
-	          </a>
-	        </div>
+				<div class="col-4 mb-3">
+				<a data-bs-toggle="collapse" href="#formdosen" role="button" aria-expanded="false" aria-controls="formdosen" class="text-decoration-none text-primary btn-toggle">
+					<div class="card shadow rounded-3 masukHover" style="border-radius: 20px !important;">
+					<div class="card-body">
+						<div class="text-center">
+						<img src="/images/dosen_icons.png" alt="dosen" class="img-fluid">
+						<h6>Dosen</h6>
+						</div>
+					</div>
+					</div>
+				</a>
+				</div>
 
-	        <div class="col-4">
-	          <a data-bs-toggle="collapse" href="#formmahasiswa" role="button" aria-expanded="false" aria-controls="formadmin" class="text-decoration-none text-primary btn-toggle">
-	            <div class="card shadow rounded-3 masukHover" style="border-radius: 20px !important;">
-	              <div class="card-body">
-	                <div class="text-center">
-	                  <img height="70" width="70" src="/images/mahasiswa_icons.png" alt="mahasiswa" class="gambarHover">
-	                  <h6>Mahasiswa</h6>
-	                </div>
-	              </div>
-	            </div>
-	          </a>
-	        </div>
+				<div class="col-4">
+				<a data-bs-toggle="collapse" href="#formmahasiswa" role="button" aria-expanded="false" aria-controls="formadmin" class="text-decoration-none text-primary btn-toggle">
+					<div class="card shadow rounded-3 masukHover" style="border-radius: 20px !important;">
+					<div class="card-body">
+						<div class="text-center">
+						<img src="/images/mahasiswa_icons.png" alt="mahasiswa" class="img-fluid">
+						<h6>Mahasiswa</h6>
+						</div>
+					</div>
+					</div>
+				</a>
+				</div>
 
-	      </div>
+			</div>
 
-	      <div class="collapse" id="formadmin">
-	      	<h5 class="text-center">Masuk Sebagai Administrator</h5>
-	      	<form method="POST" action="<?= route_to('masuk.administrator') ?>">
-	      		<?= csrf_field(); ?>
-	      		<div class="mb-3">
-	      			<label class="form-label" for="email">Alamat Email</label>
-	      			<input type="email" name="email" id="email" class="form-control" placeholder="Masukkan email">
-	      		</div>
-	      		<div class="mb-3">
-	      			<label class="form-label" for="kata_sandi">Kata Sandi Akun</label>
-	      			<input type="password" name="kata_sandi" id="kata_sandi" class="form-control" placeholder="Masukkan kata sandi">
-	      		</div>
-	      		<div class="mb-3">
-	      			<button class="btn btn-primary">Masuk</button>
-	      		</div>
-	      	</form>
-	      </div>
-	      <div class="collapse" id="formdosen">
-	        <h5 class="text-center">Masuk Sebagai Dosen</h5>
-	      	<form method="POST" action="<?= route_to('masuk.dosen') ?>">
-	      		<?= csrf_field(); ?>
-	      		<div class="mb-3">
-	      			<label class="form-label" for="nama_pengguna">Nama Pengguna</label>
-	      			<input type="text" name="nama_pengguna" id="nama_pengguna" class="form-control" placeholder="Masukkan Nama Pengguna">
-	      		</div>
-	      		<div class="mb-3">
-	      			<label class="form-label" for="kata_sandi">Kata Sandi Akun</label>
-	      			<input type="password" name="kata_sandi" id="kata_sandi" class="form-control" placeholder="Masukkan kata sandi">
-	      		</div>
-	      		<div class="mb-3">
-	      			<button class="btn btn-primary">Masuk</button>
-	      		</div>
-	      	</form>
-	      </div>
-	      <div class="collapse" id="formmahasiswa">
-	        <h5 class="text-center">Masuk Sebagai Mahasiswa</h5>
-	      	<form method="POST" action="<?= route_to('masuk.mahasiswa') ?>">
-	      		<?= csrf_field(); ?>
-	      		<div class="mb-3">
-	      			<label class="form-label" for="nama_pengguna">Nama Pengguna</label>
-	      			<input type="text" name="nama_pengguna" id="nama_pengguna" class="form-control" placeholder="Masukkan Nama Pengguna">
-	      		</div>
-	      		<div class="mb-3">
-	      			<label class="form-label" for="kata_sandi">Kata Sandi Akun</label>
-	      			<input type="password" name="kata_sandi" id="kata_sandi" class="form-control" placeholder="Masukkan kata sandi">
-	      		</div>
-	      		<div class="mb-3">
-	      			<button class="btn btn-primary">Masuk</button>
-	      		</div>
-	      	</form>
-	      </div>
+			<div class="collapse" id="formadmin">
+				<h5 class="text-center">Masuk Sebagai Administrator</h5>
+				<form method="POST" action="<?= route_to('masuk.administrator') ?>">
+					<?= csrf_field(); ?>
+					<div class="mb-3">
+						<label class="form-label" for="email">Alamat Email</label>
+						<input type="email" name="email" id="email" class="form-control" placeholder="Masukkan email">
+					</div>
+					<div class="mb-3">
+						<label class="form-label" for="kata_sandi">Kata Sandi Akun</label>
+						<input type="password" name="kata_sandi" id="kata_sandi" class="form-control" placeholder="Masukkan kata sandi">
+					</div>
+					<div class="mb-3">
+						<button class="btn btn-primary">Masuk</button>
+					</div>
+				</form>
+			</div>
+			<div class="collapse" id="formdosen">
+				<h5 class="text-center">Masuk Sebagai Dosen</h5>
+				<form method="POST" action="<?= route_to('masuk.dosen') ?>">
+					<?= csrf_field(); ?>
+					<div class="mb-3">
+						<label class="form-label" for="nama_pengguna">Nama Pengguna</label>
+						<input type="text" name="nama_pengguna" id="nama_pengguna" class="form-control" placeholder="Masukkan Nama Pengguna">
+					</div>
+					<div class="mb-3">
+						<label class="form-label" for="kata_sandi">Kata Sandi Akun</label>
+						<input type="password" name="kata_sandi" id="kata_sandi" class="form-control" placeholder="Masukkan kata sandi">
+					</div>
+					<div class="mb-3">
+						<button class="btn btn-primary">Masuk</button>
+					</div>
+				</form>
+			</div>
+			<div class="collapse" id="formmahasiswa">
+				<h5 class="text-center">Masuk Sebagai Mahasiswa</h5>
+				<form method="POST" action="<?= route_to('masuk.mahasiswa') ?>">
+					<?= csrf_field(); ?>
+					<div class="mb-3">
+						<label class="form-label" for="nama_pengguna">Nama Pengguna</label>
+						<input type="text" name="nama_pengguna" id="nama_pengguna" class="form-control" placeholder="Masukkan Nama Pengguna">
+					</div>
+					<div class="mb-3">
+						<label class="form-label" for="kata_sandi">Kata Sandi Akun</label>
+						<input type="password" name="kata_sandi" id="kata_sandi" class="form-control" placeholder="Masukkan kata sandi">
+					</div>
+					<div class="mb-3">
+						<button class="btn btn-primary">Masuk</button>
+					</div>
+				</form>
+			</div>
 
-	    </div>
-    </div>
-  </div>
+			</div>
+		</div>
+		
+	</div>
   </div>
 
 </div>

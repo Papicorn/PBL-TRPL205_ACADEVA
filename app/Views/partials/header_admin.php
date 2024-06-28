@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=1024, initial-scale=0.3">
     <?= csrf_meta() ?>
     <title><?= $title . " - " . config('App')->appName ?></title>
     
@@ -123,10 +123,10 @@
                 </a>
             </li>
             <li
-                class="sidebar-item <?php if($title == "Jadwal Ujian"): echo 'active'; endif; ?>">
-                <a href="<?= route_to('hal.jadwal_ujian') ?>" class='sidebar-link'>
+                class="sidebar-item <?php if($title == "Jadwal Asesmen"): echo 'active'; endif; ?>">
+                <a href="<?= route_to('hal.jadwal_asesmen') ?>" class='sidebar-link'>
                     <i class="fa-solid fa-calendar"></i>
-                    <span>Jadwal Ujian</span>
+                    <span>Jadwal Asesmen</span>
                 </a>
                 
 
@@ -156,7 +156,9 @@
             <div class="d-flex justify-content-between">
                 <div class="page-heading">
                     <h3 class="mb-0"><?= $title ?></h3>
-                    <h5>Selamat datang <?= session()->get('nama_pengguna') ?>!</h5>
+                    <?php if($title === 'Beranda'): ?>
+                        <h5>Selamat datang <?= session()->get('nama_pengguna') ?>!</h5>
+                    <?php endif; ?>
                 </div> 
                 <div>
                     <font class="fw-bold me-2"><i class="bi bi-wrench-adjustable-circle-fill me-1 text-primary"></i><?= session()->get('nama_pengguna') ?></font>

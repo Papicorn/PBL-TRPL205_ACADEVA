@@ -29,7 +29,7 @@
                 </div>
                 <div class="col-12">
                     <label for="kata_sandi" class="form-label">Kata Sandi</label>
-                    <input type="text" class="form-control" name="kata_sandi" id="kata_sandi" placeholder="Masukkan kata sandi">
+                    <input type="password" class="form-control" name="kata_sandi" id="kata_sandi" placeholder="Masukkan kata sandi">
                 </div>
                 <div class="col-12 col-md-6">
                     <label for="no_telpon" class="form-label">No Telepon</label>

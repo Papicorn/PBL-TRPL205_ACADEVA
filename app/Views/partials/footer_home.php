@@ -9,20 +9,15 @@
           <div class="col-12 col-md-6 col-lg-3 grid-margin">
             <h5 class="pb-2">Menu Utama</h5>
             <a href="<?= base_url('/masuk') ?>"><p class="m-0 pb-2">Masuk</p></a>   
-            <a href="<?= base_url('/daftar') ?>" ><p class="m-0 pt-1 pb-2">Daftar</p></a> 
-            <a href="#"><p class="m-0 pt-1 pb-2">Cookie Policy</p></a> 
-            <a href="#"><p class="m-0 pt-1">Discover</p></a> 
+            <a href="<?= route_to('beranda.mahasiswa') ?>" ><p class="m-0 pt-1 pb-2">Mulai Asesmen</p></a>
           </div>
           <div class="col-12 col-md-6 col-lg-3 grid-margin">
-            <h5 class="pb-2">Our Guidelines</h5>
-            <a href="<?= base_url('/ketentuan-dan-layanan') ?>"><p class="m-0 pb-2">Ketentuan dan Layanan</p></a>   
-            <a href="#" ><p class="m-0 pt-1 pb-2">Privacy policy</p></a> 
-            <a href="#"><p class="m-0 pt-1 pb-2">Cookie Policy</p></a> 
-            <a href="#"><p class="m-0 pt-1">Discover</p></a> 
+            <h5 class="pb-2">Halaman Kami</h5>
+            <a href="<?= base_url('/ketentuan-dan-layanan') ?>"><p class="m-0 pb-2">Ketentuan dan Layanan</p></a>
           </div>
           <div class="col-12 col-md-6 col-lg-3 grid-margin">
-              <h5 class="pb-2">Our address</h5>
-              <p class="text-muted">518 Schmeler Neck<br>Bartlett. Illinois</p>
+              <h5 class="pb-2">Alamat</h5>
+              <p class="text-muted">Jl. Ahmad Yani, Tlk. Tering, Kec. Batam Kota, Kota Batam, Kepulauan Riau 29461</p>
               <div class="d-flex justify-content-center justify-content-md-start">
                 <a href="#"><span class="mdi mdi-facebook"></span></a>
                 <a href="#"><span class="mdi mdi-twitter"></span></a>
@@ -64,13 +59,19 @@
 
     </div> 
   </div>
-  <?php 
-    if (session()->getFlashdata('success')): ?>
+    <?php if (session()->getFlashdata('success')): ?>
     <script>
         Swal.fire({
-            title: "<?= session()->getFlashdata('title'); ?>",
-            html: "<?= session()->getFlashdata('success'); ?>",
-            icon: "success"
+          title: "<?= session()->getFlashdata('title'); ?>",
+          text: "<?= session()->getFlashdata('success'); ?>",
+          icon: 'success',
+          showCancelButton: true,
+          cancelButtonText: 'Oke!',
+          confirmButtonText: 'Beranda'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            window.location.href = "<?= session()->getFlashdata('link'); ?>";
+          }
         });
     </script>
     <?php endif; ?>

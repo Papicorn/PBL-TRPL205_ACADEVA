@@ -114,7 +114,7 @@ class ProdiController extends BaseController
 
         if(!$cekData && $this->db->affectedRows() == 0) {
             $pesan = [
-                'pesan' => 'Program studi gagal ditambahkan!',
+                'pesan' => 'Program studi gagal diubah!',
                 'alert' => 'danger'
             ];
             session()->SetFlashData('sweet', 'error');
@@ -122,7 +122,7 @@ class ProdiController extends BaseController
             return redirect()->back()->with('pesan', $pesan);
         } else {
             $pesan = [
-                'pesan' => 'Program studi berhasil ditambahkan!',
+                'pesan' => 'Program studi berhasil diubah!',
                 'alert' => 'success'
             ];
             session()->SetFlashData('sweet', 'success');

@@ -7,7 +7,7 @@
 	      <h1 class="font-weight-semibold">E-Assessment<br>Berbasis <font class="text-primary">Passing Grade</font>.</h1>
 	      <h6 class="font-weight-normal text-muted pb-3">E-Assessment berbasis passing grade adalah metode evaluasi yang memanfaatkan teknologi digital untuk mengukur kemampuan peserta dengan mengacu pada standar kelulusan tertentu. Dengan fokus pada transparansi dan efisiensi. Temukan kemudahan e-assessment untuk hasil yang cepat dan akurat.</h6>
 	      <div>
-	        <button class="btn btn-primary">Mulai sekarang <span class="mdi mdi-arrow-right"></span></button>
+	        <a href="<?= route_to('beranda.mahasiswa') ?>" class="btn btn-primary">Mulai sekarang <span class="mdi mdi-arrow-right"></span></a>
 	      </div>
       </div>
 
@@ -93,8 +93,7 @@
                   </div>  
                   <div class="card-desc-box d-flex align-items-center justify-content-around">
                     <div>
-                      <h6 class="text-white pb-2 px-3">Cari Tahu Tetang Penilaian Soal Otomatis</h6>
-                      <button class="btn btn-white">Selengkapnya</button>
+                      <h6 class="text-white pb-2 px-3">Fitur yang memudahkan dosen dan mahasiswa untuk melihat nilai secara langsung tanpa harus menunggu.</h6>
                     </div>
                   </div>
                 </div>   
@@ -114,14 +113,13 @@
                   </div>  
                   <div class="card-desc-box d-flex align-items-center justify-content-around">
                     <div>
-                      <h6 class="text-white pb-2 px-3">Know more about Web Development</h6>
-                      <button class="btn btn-white">Read More</button>
+                      <h6 class="text-white pb-2 px-3">Menampilkan info jadwal dengan Kalender</h6>
                     </div>
                   </div>
                 </div>   
                 <div class="card-details text-center pt-4">
-                    <h6 class="m-0 pb-1">Web Development</h6>
-                    <p>Developing, Designing</p>
+                    <h6 class="m-0 pb-1">Jadwal dengan Kalender</h6>
+                    <p>Fitur No.2</p>
                 </div>
               </div>
             </div>
@@ -135,14 +133,13 @@
                   </div>  
                   <div class="card-desc-box d-flex align-items-center justify-content-around">
                     <div>
-                      <h6 class="text-white pb-2 px-3">Know more about Web Designing</h6>
-                      <button class="btn btn-white">Read More</button>
+                      <h6 class="text-white pb-2 px-3">Mempermudah bagi dosen untuk mencetak langsung hasil rekapitulasi mahasiswa ke PDF</h6>
                     </div>
                   </div>
                 </div>   
                 <div class="card-details text-center pt-4">
-                    <h6 class="m-0 pb-1">Web Designing</h6>
-                    <p>Designing, Developing</p>
+                    <h6 class="m-0 pb-1">Cetak Rekapitulasi Mahasiswa ke PDF</h6>
+                    <p>Fitur No.3</p>
                 </div>
               </div>
             </div>
@@ -156,14 +153,13 @@
                   </div>  
                   <div class="card-desc-box d-flex align-items-center justify-content-around">
                     <div>
-                      <h6 class="text-white pb-2 px-3">Know more about Software Development</h6>
-                      <button class="btn btn-white">Read More</button>
+                      <h6 class="text-white pb-2 px-3">Menampilkan analisis hasil yang sangat simple dan mudah dipahami</h6>
                     </div>
                   </div>
                 </div>   
                 <div class="card-details text-center pt-4">
-                    <h6 class="m-0 pb-1">Software Development</h6>
-                    <p>Developing, Designing</p>
+                    <h6 class="m-0 pb-1">Analisis Hasil yang Mudah Dipahami</h6>
+                    <p>Fitur No.4</p>
                 </div>
               </div>
             </div>
@@ -175,10 +171,10 @@
         <div class="contact-us-bgimage grid-margin" >
           <div class="pb-4">
             <h4 class="px-3 px-md-0 m-0" data-aos="fade-down">Apakah anda memiliki kendala?</h4>
-            <h4 class="pt-1" data-aos="fade-down">Hubungi kami</h4>
+            <h4 class="pt-1" data-aos="fade-down">Hubungi kami</a></h4>
           </div>
           <div data-aos="fade-up">
-            <button class="btn btn-rounded btn-outline-danger">Hubungi kami</button>
+            <a href="mailto:acadeva24@gmail.com?subject=Butuh Bantuan&body=Isi pesan di sini" class="btn btn-rounded btn-outline-danger">Hubungi kami</a>
           </div>          
         </div>
       </section>

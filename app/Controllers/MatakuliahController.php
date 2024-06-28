@@ -6,20 +6,17 @@ use App\Controllers\BaseController;
 use CodeIgniter\HTTP\ResponseInterface;
 use App\Models\MatakuliahModel;
 use App\Models\DosenModel;
-use App\Models\KelasModel;
 use App\Models\ProdiModel;
 
 class MatakuliahController extends BaseController
 {
     protected $mmatkul;
     protected $mdosen;
-    protected $mkelas;
     protected $mprodi;
     protected $db;
     public function __construct()
     {
         $this->mmatkul = new MatakuliahModel();
-        $this->mkelas = new KelasModel();
         $this->mprodi = new ProdiModel();
         $this->mdosen = new DosenModel();
         $this->db = \Config\Database::connect();
@@ -143,7 +140,7 @@ class MatakuliahController extends BaseController
     }
     public function hapusMatkul($kode_matkul)
     {
-        if(!$kode_matkul && $this->mmatkul->find($kode_matkul)) {
+        if($kode_matkul && $this->mmatkul->find($kode_matkul)) {
             if($this->mmatkul->delete($kode_matkul)) {
                 $pesan = [
                     'pesan' => 'Matakuliah berhasil di hapus!',

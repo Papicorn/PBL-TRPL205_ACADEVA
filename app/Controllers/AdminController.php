@@ -69,6 +69,7 @@ class AdminController extends BaseController
 
             session()->setFlashdata('title', 'Berhasil masuk!');
             session()->setFlashdata('success', 'Anda berhasil masuk ke aplikasi!');
+            session()->setFlashdata('link', route_to('beranda.admin'));
 
             return redirect()->to(base_url('/home'));
         } else {
